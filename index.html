@@ -1,16 +1,313 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My History Blog</title>
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Ledger — History, Facts & Politics</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 </head>
 <body>
-    <h1>Welcome to My Blog</h1>
-    <nav>
-    <a href="index.html">Home</a>
-    <a href="history/sainbari.html">History</a>
-    <a href="politics/emergency.html">Politics</a>
-</nav>
-    <p>Articles on history, politics and facts.</p>
+
+  <!-- ── NAVIGATION ── -->
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+      <div class="header-top">
+        <div class="dateline" id="dateline"></div>
+        <a href="#" class="logo">The<em>Ledger</em></a>
+        <div class="header-cta">
+          <a href="#" class="btn-subscribe">Subscribe</a>
+        </div>
+      </div>
+
+      <nav class="main-nav" id="main-nav">
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-list" id="nav-list">
+          <li><a href="#" class="nav-link active">Home</a></li>
+          <li><a href="#" class="nav-link">History</a></li>
+          <li><a href="#" class="nav-link">Politics</a></li>
+          <li><a href="#" class="nav-link">Strange Facts</a></li>
+          <li><a href="#" class="nav-link">Deep Dives</a></li>
+          <li><a href="#" class="nav-link">Archives</a></li>
+          <li><a href="#" class="nav-link">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ── HERO ── -->
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="hero-tag">Editor's Pick</div>
+        <h1 class="hero-headline">
+          The Forgotten<br /><em>Empires That</em><br />Built the World
+        </h1>
+        <p class="hero-sub">
+          Before nations drew borders on maps, ancient trading networks
+          linked continents in ways historians are only beginning to fully understand.
+        </p>
+        <div class="hero-meta">
+          <span class="author">By <strong>Clara Whitmore</strong></span>
+          <span class="dot">·</span>
+          <span class="read-time">12 min read</span>
+          <span class="dot">·</span>
+          <span class="category">History</span>
+        </div>
+        <a href="#" class="btn-read">Read Article →</a>
+        <div class="hero-number">01</div>
+      </div>
+      <div class="hero-image-wrap">
+        <div class="hero-image" aria-hidden="true"></div>
+        <div class="hero-overlay-text">MMXXVI</div>
+      </div>
+    </section>
+
+    <!-- ── TICKER ── -->
+    <div class="ticker-wrap" aria-label="Latest headlines ticker">
+      <span class="ticker-label">LATEST</span>
+      <div class="ticker-track" id="ticker-track">
+        <div class="ticker-inner" id="ticker-inner">
+          <span>The Senate Debate No One Saw Coming</span>
+          <span>·</span>
+          <span>5 Myths About the Roman Empire Debunked</span>
+          <span>·</span>
+          <span>Cold War Secrets: Newly Declassified Files</span>
+          <span>·</span>
+          <span>Is Democracy in Retreat? A Global Survey</span>
+          <span>·</span>
+          <span>The Forgotten Women of the French Revolution</span>
+          <span>·</span>
+          <span>Why Maps Have Always Been Political Weapons</span>
+          <span>·</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── FEATURED GRID ── -->
+    <section class="section featured-section">
+      <div class="section-header">
+        <h2 class="section-title">Featured Stories</h2>
+        <a href="#" class="see-all">See All →</a>
+      </div>
+
+      <div class="card-grid">
+
+        <article class="card card--large" data-reveal>
+          <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=900&q=80')"></div>
+          <div class="card-body">
+            <span class="card-cat cat-politics">Politics</span>
+            <h3 class="card-title">The Rise of the Populist Right: A Century in the Making</h3>
+            <p class="card-excerpt">From Mussolini's Italy to today's ballot boxes, the playbook has changed less than we think.</p>
+            <div class="card-meta">
+              <span>James Rao</span><span class="dot">·</span><span>9 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-reveal>
+          <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1461360370896-922624d12aa1?w=600&q=80')"></div>
+          <div class="card-body">
+            <span class="card-cat cat-history">History</span>
+            <h3 class="card-title">The Night the Berlin Wall Fell — Hour by Hour</h3>
+            <div class="card-meta">
+              <span>Petra Schwartz</span><span class="dot">·</span><span>7 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-reveal>
+          <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1495020689067-958852a7765e?w=600&q=80')"></div>
+          <div class="card-body">
+            <span class="card-cat cat-facts">Strange Facts</span>
+            <h3 class="card-title">Vikings in North America: The Evidence Keeps Growing</h3>
+            <div class="card-meta">
+              <span>M. Okafor</span><span class="dot">·</span><span>5 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-reveal>
+          <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=600&q=80')"></div>
+          <div class="card-body">
+            <span class="card-cat cat-politics">Politics</span>
+            <h3 class="card-title">Electoral College: Relic of Slavery or Democratic Safeguard?</h3>
+            <div class="card-meta">
+              <span>Dana Firth</span><span class="dot">·</span><span>11 min</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ── DIVIDER QUOTE ── -->
+    <blockquote class="pull-quote" data-reveal>
+      <p>"Those who cannot remember the past are condemned to repeat it."</p>
+      <cite>— George Santayana, <em>The Life of Reason</em>, 1905</cite>
+    </blockquote>
+
+    <!-- ── TWO-COLUMN: HISTORY + POLITICS ── -->
+    <section class="section two-col-section">
+      <div class="two-col-wrap">
+
+        <div class="col-block">
+          <div class="col-header">
+            <h2 class="col-title">History</h2>
+            <a href="#" class="see-all">More →</a>
+          </div>
+          <div class="list-articles">
+            <article class="list-article" data-reveal>
+              <span class="list-num">01</span>
+              <div>
+                <h4>How Genghis Khan's Death Changed the World's Trajectory</h4>
+                <div class="card-meta"><span>5 min</span></div>
+              </div>
+            </article>
+            <article class="list-article" data-reveal>
+              <span class="list-num">02</span>
+              <div>
+                <h4>The Silk Road Was Never Just About Silk</h4>
+                <div class="card-meta"><span>8 min</span></div>
+              </div>
+            </article>
+            <article class="list-article" data-reveal>
+              <span class="list-num">03</span>
+              <div>
+                <h4>Plague, Trade & Power: How the Black Death Remade Europe</h4>
+                <div class="card-meta"><span>10 min</span></div>
+              </div>
+            </article>
+            <article class="list-article" data-reveal>
+              <span class="list-num">04</span>
+              <div>
+                <h4>Ancient Libraries That Changed Civilisation</h4>
+                <div class="card-meta"><span>6 min</span></div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="col-block">
+          <div class="col-header">
+            <h2 class="col-title">Politics</h2>
+            <a href="#" class="see-all">More →</a>
+          </div>
+          <div class="list-articles">
+            <article class="list-article" data-reveal>
+              <span class="list-num">01</span>
+              <div>
+                <h4>The Geopolitics of Arctic Ice: Who Owns the North?</h4>
+                <div class="card-meta"><span>7 min</span></div>
+              </div>
+            </article>
+            <article class="list-article" data-reveal>
+              <span class="list-num">02</span>
+              <div>
+                <h4>When Propaganda Works — and When It Doesn't</h4>
+                <div class="card-meta"><span>9 min</span></div>
+              </div>
+            </article>
+            <article class="list-article" data-reveal>
+              <span class="list-num">03</span>
+              <div>
+                <h4>The Quiet Collapse of the Two-Party System</h4>
+                <div class="card-meta"><span>6 min</span></div>
+              </div>
+            </article>
+            <article class="list-article" data-reveal>
+              <span class="list-num">04</span>
+              <div>
+                <h4>Nuclear Diplomacy After Ukraine: A New Deterrence Era</h4>
+                <div class="card-meta"><span>12 min</span></div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── FACT OF THE DAY ── -->
+    <section class="fact-band" data-reveal>
+      <div class="fact-inner">
+        <div class="fact-label">
+          <span class="fact-icon">★</span>
+          Fact of the Day
+        </div>
+        <p class="fact-text" id="fact-text">Loading today's fact…</p>
+        <button class="btn-nextfact" id="next-fact">Next Fact →</button>
+      </div>
+    </section>
+
+    <!-- ── DEEP DIVES ── -->
+    <section class="section deep-section">
+      <div class="section-header">
+        <h2 class="section-title">Deep Dives</h2>
+        <a href="#" class="see-all">See All →</a>
+      </div>
+      <div class="deep-grid">
+
+        <article class="deep-card" data-reveal>
+          <div class="deep-num">I</div>
+          <div>
+            <span class="card-cat cat-history">History</span>
+            <h3>The Ottoman Empire's Long Shadow on the Modern Middle East</h3>
+            <p>Four hundred years of Ottoman rule did not end in 1922. Its legacy continues to shape borders, religions, and tensions that define the region today.</p>
+            <a href="#" class="btn-ghost">Read Full Essay →</a>
+          </div>
+        </article>
+
+        <article class="deep-card" data-reveal>
+          <div class="deep-num">II</div>
+          <div>
+            <span class="card-cat cat-politics">Politics</span>
+            <h3>Disinformation, AI & the Future of Free Elections</h3>
+            <p>As synthetic media becomes indistinguishable from real footage, political campaigns — and democracies — face an unprecedented credibility crisis.</p>
+            <a href="#" class="btn-ghost">Read Full Essay →</a>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ── NEWSLETTER ── -->
+    <section class="newsletter-band" data-reveal>
+      <div class="newsletter-inner">
+        <div class="newsletter-text">
+          <h2>History Doesn't Repeat.<br /><em>But It Rhymes.</em></h2>
+          <p>Weekly dispatches — curated stories, forgotten facts, and sharp political analysis. No noise.</p>
+        </div>
+        <div class="newsletter-form">
+          <input type="email" placeholder="your@email.com" class="email-input" aria-label="Email address" />
+          <button class="btn-join">Join the Ledger</button>
+          <small>No spam. Unsubscribe anytime.</small>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-logo">The<em>Ledger</em></div>
+      <div class="footer-links">
+        <a href="#">History</a>
+        <a href="#">Politics</a>
+        <a href="#">Strange Facts</a>
+        <a href="#">Deep Dives</a>
+        <a href="#">Archives</a>
+        <a href="#">About</a>
+        <a href="#">Privacy</a>
+      </div>
+      <p class="footer-copy">© 2026 The Ledger. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
