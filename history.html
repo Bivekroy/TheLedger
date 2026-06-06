@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>History — The Ledger</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ══════════════════════════════════════════
+       THE LEDGER — history.html (embedded CSS)
+       ══════════════════════════════════════════ */
+
+    :root {
+      --ink:        #1a1612;
+      --ink-soft:   #3d3530;
+      --ink-faint:  #6b5f57;
+      --paper:      #f5f0e8;
+      --paper-dark: #ede6d6;
+      --rule:       #c9bfb0;
+      --accent:     #b5321a;
+      --accent-lt:  #d94a2c;
+      --gold:       #c8973a;
+      --blue:       #1d3a5f;
+      --sepia:      #8b6f47;
+
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'Libre Baskerville', Georgia, serif;
+      --font-mono:    'IBM Plex Mono', monospace;
+
+      --max-w: 1280px;
+      --ease:  cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-body);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+    h1,h2,h3,h4 { font-family: var(--font-display); line-height: 1.15; font-weight: 900; }
+    .dot { margin: 0 .35em; opacity: .4; }
+
+    /* ── HEADER ── */
+    .site-header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--ink); color: var(--paper);
+      border-bottom: 3px solid var(--accent);
+      transition: box-shadow .3s;
+    }
+    .site-header.scrolled { box-shadow: 0 4px 24px rgba(0,0,0,.35); }
+
+    .header-inner { max-width: var(--max-w); margin: 0 auto; padding: 0 2rem; }
+
+    .header-top {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: .85rem 0 .6rem;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+
+    .dateline {
+      font-family: var(--font-mono); font-size: .72rem;
+      letter-spacing: .06em; color: rgba(255,255,255,.45); flex: 1;
+    }
+
+    .logo {
+      font-family: var(--font-display); font-size: 1.9rem; font-weight: 900;
+      letter-spacing: -.02em; color: var(--paper);
+      flex: 1; text-align: center; transition: color .2s;
+    }
+    .logo em { color: var(--accent); font-style: italic; }
+    .logo:hover { color: var(--gold); }
+
+    .header-cta { flex: 1; display: flex; justify-content: flex-end; }
+    .btn-subscribe {
+      font-family: var(--font-mono); font-size: .7rem; font-weight: 500;
+      letter-spacing: .1em; text-transform: uppercase;
+      border: 1px solid var(--accent); color: var(--accent);
+      padding: .4rem .9rem; border-radius: 2px;
+      transition: background .2s, color .2s;
+    }
+    .btn-subscribe:hover { background: var(--accent); color: #fff; }
+
+    .main-nav { position: relative; }
+    .nav-list {
+      display: flex; align-items: center; justify-content: center;
+      gap: .2rem; padding: .5rem 0;
+    }
+    .nav-link {
+      font-family: var(--font-mono); font-size: .72rem; font-weight: 500;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: rgba(255,255,255,.65); padding: .4rem .75rem;
+      border-radius: 2px; transition: color .2s;
+      position: relative;
+    }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: 2px;
+      left: .75rem; right: .75rem; height: 2px;
+      background: var(--accent);
+      transform: scaleX(0); transition: transform .25s var(--ease);
+    }
+    .nav-link:hover, .nav-link.active { color: #fff; }
+    .nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+
+    .nav-toggle {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: .5rem;
+      position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+    }
+    .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--paper); transition: transform .3s, opacity .3s; }
+
+    /* ── PAGE HERO (History Banner) ── */
+    .page-hero {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 5rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-hero::before {
+      content: 'HISTORY';
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      font-family: var(--font-display); font-size: clamp(6rem, 18vw, 18rem);
+      font-weight: 900; letter-spacing: -.03em;
+      color: rgba(255,255,255,.03);
+      white-space: nowrap; pointer-events: none; user-select: none;
+    }
+
+    .page-hero-inner {
+      max-width: var(--max-w); margin: 0 auto;
+      display: flex; flex-direction: column; align-items: flex-start;
+      position: relative; z-index: 1;
+    }
+
+    .breadcrumb {
+      font-family: var(--font-mono); font-size: .68rem;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: rgba(255,255,255,.4); margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: .5rem;
+    }
+    .breadcrumb a { color: var(--gold); transition: opacity .2s; }
+    .breadcrumb a:hover { opacity: .7; }
+    .breadcrumb span { opacity: .4; }
+
+    .page-hero h1 {
+      font-size: clamp(2.8rem, 6vw, 5.5rem);
+      font-weight: 900; line-height: 1.0;
+      animation: fadeUp .7s var(--ease) both;
+    }
+    .page-hero h1 em { color: var(--gold); font-style: italic; }
+
+    .page-hero-desc {
+      margin-top: 1.5rem; max-width: 560px;
+      font-size: 1rem; color: rgba(245,240,232,.6); line-height: 1.7;
+      animation: fadeUp .7s .1s var(--ease) both;
+    }
+
+    .page-hero-meta {
+      margin-top: 2rem; display: flex; align-items: center; gap: 2rem;
+      animation: fadeUp .7s .18s var(--ease) both;
+    }
+
+    .meta-stat { text-align: center; }
+    .meta-stat strong {
+      display: block; font-family: var(--font-display);
+      font-size: 2rem; font-weight: 900; color: var(--gold);
+    }
+    .meta-stat span {
+      font-family: var(--font-mono); font-size: .65rem;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: rgba(255,255,255,.4);
+    }
+
+    .meta-divider { width: 1px; height: 40px; background: rgba(255,255,255,.15); }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      background: var(--paper-dark);
+      border-bottom: 2px solid var(--rule);
+      position: sticky; top: 120px; z-index: 90;
+    }
+
+    .filter-inner {
+      max-width: var(--max-w); margin: 0 auto;
+      padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; flex-wrap: wrap;
+    }
+
+    .filter-tags {
+      display: flex; align-items: center; gap: .4rem;
+      padding: .75rem 0; flex-wrap: wrap;
+    }
+
+    .filter-label {
+      font-family: var(--font-mono); font-size: .65rem;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--ink-faint); margin-right: .4rem;
+    }
+
+    .filter-btn {
+      font-family: var(--font-mono); font-size: .68rem;
+      letter-spacing: .06em; text-transform: uppercase;
+      background: none; border: 1px solid var(--rule);
+      color: var(--ink-soft); padding: .3rem .75rem;
+      border-radius: 2px; cursor: pointer;
+      transition: background .2s, border-color .2s, color .2s;
+    }
+    .filter-btn:hover { border-color: var(--ink); color: var(--ink); }
+    .filter-btn.active { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+    .sort-select {
+      font-family: var(--font-mono); font-size: .68rem;
+      letter-spacing: .04em; background: none;
+      border: 1px solid var(--rule); color: var(--ink-soft);
+      padding: .3rem .75rem; border-radius: 2px; cursor: pointer;
+      outline: none;
+    }
+
+    /* ── FEATURED POST (top of history) ── */
+    .featured-post {
+      max-width: var(--max-w); margin: 0 auto;
+      padding: 3.5rem 2rem 0;
+    }
+
+    .featured-post-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 0; border: 2px solid var(--ink); overflow: hidden;
+      animation: fadeUp .6s var(--ease) both;
+    }
+
+    .fp-image {
+      background-image: url('https://images.unsplash.com/photo-1580674684081-7617fbf3d745?w=900&q=80');
+      background-size: cover; background-position: center;
+      min-height: 480px;
+      filter: sepia(15%) contrast(1.05);
+      transition: transform .7s var(--ease);
+    }
+    .featured-post-inner:hover .fp-image { transform: scale(1.03); }
+
+    .fp-body {
+      background: var(--ink); color: var(--paper);
+      padding: 3rem 3rem 3rem;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+
+    .fp-tag {
+      font-family: var(--font-mono); font-size: .65rem;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.2rem;
+      display: flex; align-items: center; gap: .6rem;
+    }
+    .fp-tag::before { content: ''; display: block; width: 24px; height: 2px; background: var(--gold); }
+
+    .fp-body h2 {
+      font-size: clamp(1.6rem, 2.8vw, 2.5rem); font-weight: 900;
+      margin-bottom: 1.2rem; line-height: 1.1;
+    }
+    .fp-body h2 em { color: var(--gold); font-style: italic; }
+
+    .fp-excerpt {
+      color: rgba(245,240,232,.65); font-size: .95rem;
+      line-height: 1.7; margin-bottom: 2rem;
+    }
+
+    .fp-meta {
+      display: flex; align-items: center; font-family: var(--font-mono);
+      font-size: .7rem; color: rgba(245,240,232,.4);
+      margin-bottom: 2rem; gap: 0;
+    }
+
+    .btn-read-fp {
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-family: var(--font-mono); font-size: .75rem;
+      font-weight: 500; letter-spacing: .06em;
+      background: var(--accent); color: #fff;
+      padding: .75rem 1.5rem; border-radius: 2px; width: fit-content;
+      transition: background .2s, transform .2s;
+    }
+    .btn-read-fp:hover { background: var(--accent-lt); transform: translateX(4px); }
+
+    /* ── SECTION DIVIDER ── */
+    .section-divider {
+      max-width: var(--max-w); margin: 3.5rem auto 0;
+      padding: 0 2rem;
+    }
+    .section-divider-inner {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      border-top: 3px solid var(--ink); padding-top: 1rem;
+    }
+    .section-divider h2 { font-size: 1.6rem; font-weight: 900; }
+    .article-count {
+      font-family: var(--font-mono); font-size: .7rem;
+      color: var(--ink-faint); letter-spacing: .06em;
+    }
+
+    /* ── POSTS GRID ── */
+    .posts-section {
+      max-width: var(--max-w); margin: 0 auto;
+      padding: 2rem 2rem 5rem;
+    }
+
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: var(--rule);
+      border: 2px solid var(--rule);
+    }
+
+    /* Post Card */
+    .post-card {
+      background: var(--paper);
+      display: flex; flex-direction: column;
+      cursor: pointer; overflow: hidden;
+      transition: transform .3s var(--ease);
+      opacity: 0; transform: translateY(24px);
+      animation: cardReveal .5s var(--ease) forwards;
+    }
+
+    .post-card:nth-child(1) { animation-delay: .05s; }
+    .post-card:nth-child(2) { animation-delay: .12s; }
+    .post-card:nth-child(3) { animation-delay: .19s; }
+    .post-card:nth-child(4) { animation-delay: .26s; }
+    .post-card:nth-child(5) { animation-delay: .33s; }
+    .post-card:nth-child(6) { animation-delay: .40s; }
+    .post-card:nth-child(7) { animation-delay: .47s; }
+    .post-card:nth-child(8) { animation-delay: .54s; }
+    .post-card:nth-child(9) { animation-delay: .61s; }
+
+    .post-card:hover { transform: translateY(-4px); }
+    .post-card:hover .post-img { transform: scale(1.06); }
+
+    .post-img-wrap { overflow: hidden; aspect-ratio: 16/10; }
+
+    .post-img {
+      width: 100%; height: 100%;
+      background-size: cover; background-position: center;
+      transition: transform .6s var(--ease);
+      filter: sepia(10%) contrast(1.03);
+    }
+
+    .post-body { padding: 1.3rem 1.5rem 1.6rem; flex: 1; display: flex; flex-direction: column; }
+
+    .post-era {
+      font-family: var(--font-mono); font-size: .6rem;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--sepia); margin-bottom: .6rem;
+      display: flex; align-items: center; gap: .5rem;
+    }
+    .post-era::before {
+      content: ''; display: block;
+      width: 16px; height: 1px; background: var(--sepia);
+    }
+
+    .post-title {
+      font-size: 1.05rem; font-weight: 700;
+      line-height: 1.3; margin-bottom: .7rem;
+      transition: color .2s;
+    }
+    .post-card:hover .post-title { color: var(--accent); }
+
+    .post-excerpt {
+      font-size: .85rem; color: var(--ink-faint);
+      line-height: 1.6; flex: 1; margin-bottom: 1rem;
+    }
+
+    .post-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--rule); padding-top: .75rem;
+      font-family: var(--font-mono); font-size: .65rem; color: var(--ink-faint);
+    }
+
+    .post-author { display: flex; align-items: center; gap: .4rem; }
+    .author-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); flex-shrink: 0;
+    }
+
+    .post-read-time { color: var(--rule); }
+
+    /* ── TIMELINE STRIP ── */
+    .timeline-strip {
+      background: var(--blue); color: var(--paper);
+      padding: 3.5rem 2rem;
+      overflow: hidden;
+    }
+
+    .timeline-inner {
+      max-width: var(--max-w); margin: 0 auto;
+    }
+
+    .timeline-header {
+      display: flex; align-items: baseline;
+      justify-content: space-between; margin-bottom: 2.5rem;
+      border-bottom: 1px solid rgba(255,255,255,.15); padding-bottom: 1rem;
+    }
+
+    .timeline-header h2 { font-size: 1.5rem; color: var(--paper); }
+
+    .timeline-see-all {
+      font-family: var(--font-mono); font-size: .7rem;
+      letter-spacing: .08em; color: var(--gold);
+      transition: letter-spacing .2s;
+    }
+    .timeline-see-all:hover { letter-spacing: .14em; }
+
+    .timeline-events {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      position: relative;
+    }
+
+    .timeline-events::before {
+      content: '';
+      position: absolute;
+      top: 20px; left: 0; right: 0;
+      height: 2px; background: rgba(255,255,255,.2);
+    }
+
+    .timeline-event {
+      padding: 0 1rem; text-align: center;
+      position: relative; cursor: pointer;
+      transition: transform .2s;
+    }
+    .timeline-event:hover { transform: translateY(-4px); }
+
+    .tl-dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--gold); border: 3px solid var(--blue);
+      margin: 13px auto 1.2rem; position: relative; z-index: 1;
+      transition: transform .2s, background .2s;
+    }
+    .timeline-event:hover .tl-dot { transform: scale(1.5); background: var(--accent); }
+
+    .tl-year {
+      font-family: var(--font-display); font-size: 1.1rem;
+      font-weight: 900; color: var(--gold); margin-bottom: .4rem;
+    }
+
+    .tl-title {
+      font-family: var(--font-body); font-size: .78rem;
+      color: rgba(245,240,232,.7); line-height: 1.4;
+    }
+
+    /* ── WIDE POST (list style) ── */
+    .wide-posts-section {
+      max-width: var(--max-w); margin: 0 auto;
+      padding: 0 2rem 2rem;
+    }
+
+    .wide-post {
+      display: grid; grid-template-columns: 240px 1fr;
+      gap: 0; border-bottom: 1px solid var(--rule);
+      overflow: hidden; cursor: pointer;
+      transition: background .2s;
+    }
+    .wide-post:first-child { border-top: 1px solid var(--rule); }
+    .wide-post:hover { background: var(--paper-dark); }
+    .wide-post:hover .wide-post-title { color: var(--accent); }
+    .wide-post:hover .wide-img { transform: scale(1.05); }
+
+    .wide-img-wrap { overflow: hidden; height: 160px; }
+    .wide-img {
+      width: 100%; height: 100%;
+      background-size: cover; background-position: center;
+      filter: sepia(12%);
+      transition: transform .5s var(--ease);
+    }
+
+    .wide-body {
+      padding: 1.4rem 2rem;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+
+    .wide-post-era {
+      font-family: var(--font-mono); font-size: .62rem;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--sepia); margin-bottom: .5rem;
+    }
+
+    .wide-post-title {
+      font-size: 1.15rem; font-weight: 700;
+      line-height: 1.3; margin-bottom: .6rem;
+      transition: color .2s;
+    }
+
+    .wide-post-excerpt {
+      font-size: .85rem; color: var(--ink-faint);
+      line-height: 1.6; margin-bottom: .8rem;
+    }
+
+    .wide-post-meta {
+      display: flex; align-items: center;
+      font-family: var(--font-mono); font-size: .65rem; color: var(--ink-faint);
+    }
+
+    /* ── MORE ARTICLES (load more) ── */
+    .load-more-wrap {
+      text-align: center; padding: 2.5rem 2rem 4rem;
+    }
+
+    .btn-load {
+      font-family: var(--font-mono); font-size: .75rem;
+      font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+      background: none; border: 2px solid var(--ink);
+      color: var(--ink); padding: .9rem 2.5rem;
+      border-radius: 2px; cursor: pointer;
+      transition: background .2s, color .2s;
+      position: relative; overflow: hidden;
+    }
+    .btn-load:hover { background: var(--ink); color: var(--paper); }
+
+    /* ── SIDEBAR ASIDE ── */
+    .content-with-sidebar {
+      max-width: var(--max-w); margin: 0 auto;
+      padding: 0 2rem 4rem;
+      display: grid; grid-template-columns: 1fr 300px;
+      gap: 3rem; align-items: start;
+    }
+
+    .sidebar { display: flex; flex-direction: column; gap: 2.5rem; }
+
+    .sidebar-block { border-top: 3px solid var(--ink); padding-top: 1rem; }
+
+    .sidebar-title {
+      font-family: var(--font-display); font-size: 1.1rem;
+      font-weight: 900; margin-bottom: 1.2rem;
+    }
+
+    .sidebar-era-list { display: flex; flex-direction: column; gap: .1rem; }
+
+    .era-item {
+      display: flex; align-items: center; justify-content: space-between;
+      font-family: var(--font-mono); font-size: .72rem;
+      padding: .55rem .6rem; border-radius: 2px;
+      cursor: pointer; transition: background .2s;
+    }
+    .era-item:hover { background: var(--paper-dark); }
+    .era-item span:first-child { color: var(--ink-soft); letter-spacing: .04em; }
+    .era-item span:last-child {
+      background: var(--rule); color: var(--ink-faint);
+      padding: .1rem .45rem; border-radius: 10px; font-size: .62rem;
+    }
+
+    .sidebar-tags { display: flex; flex-wrap: wrap; gap: .45rem; }
+
+    .tag-pill {
+      font-family: var(--font-mono); font-size: .63rem;
+      letter-spacing: .06em; text-transform: uppercase;
+      border: 1px solid var(--rule); color: var(--ink-faint);
+      padding: .25rem .6rem; border-radius: 20px; cursor: pointer;
+      transition: background .2s, border-color .2s, color .2s;
+    }
+    .tag-pill:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+    .sidebar-quotes { display: flex; flex-direction: column; gap: 1.2rem; }
+
+    .sidebar-quote {
+      border-left: 3px solid var(--gold);
+      padding-left: 1rem;
+    }
+    .sidebar-quote p {
+      font-family: var(--font-display); font-style: italic;
+      font-size: .9rem; line-height: 1.5; color: var(--ink-soft);
+      margin-bottom: .35rem;
+    }
+    .sidebar-quote cite {
+      font-family: var(--font-mono); font-size: .63rem;
+      color: var(--ink-faint); letter-spacing: .04em;
+    }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      background: var(--paper-dark); border-top: 3px solid var(--ink);
+      padding: 3rem 2rem;
+    }
+    .footer-inner {
+      max-width: var(--max-w); margin: 0 auto;
+      display: flex; flex-direction: column; align-items: center; gap: 1.5rem;
+    }
+    .footer-logo { font-family: var(--font-display); font-size: 1.6rem; font-weight: 900; letter-spacing: -.01em; }
+    .footer-logo em { color: var(--accent); font-style: italic; }
+    .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: .3rem 1.5rem; }
+    .footer-links a {
+      font-family: var(--font-mono); font-size: .7rem;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: var(--ink-faint); transition: color .2s;
+    }
+    .footer-links a:hover { color: var(--accent); }
+    .footer-copy { font-family: var(--font-mono); font-size: .65rem; color: var(--ink-faint); letter-spacing: .05em; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes cardReveal {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .posts-grid { grid-template-columns: repeat(2, 1fr); }
+      .content-with-sidebar { grid-template-columns: 1fr; }
+      .sidebar { display: grid; grid-template-columns: 1fr 1fr; }
+      .timeline-events { grid-template-columns: repeat(3, 1fr); }
+      .featured-post-inner { grid-template-columns: 1fr; }
+      .fp-image { min-height: 300px; }
+    }
+
+    @media (max-width: 768px) {
+      .dateline, .header-cta { display: none; }
+      .logo { font-size: 1.5rem; text-align: left; }
+      .nav-toggle { display: flex; }
+      .nav-list {
+        position: absolute; top: 100%; left: -2rem; right: -2rem;
+        background: var(--ink); border-top: 2px solid var(--accent);
+        flex-direction: column; align-items: flex-start;
+        gap: 0; padding: .5rem 0; display: none;
+      }
+      .nav-list.open { display: flex; }
+      .nav-link { width: 100%; padding: .7rem 1.5rem; }
+      .nav-link::after { display: none; }
+      .posts-grid { grid-template-columns: 1fr; }
+      .wide-post { grid-template-columns: 1fr; }
+      .wide-img-wrap { height: 200px; }
+      .timeline-events { grid-template-columns: repeat(2, 1fr); }
+      .sidebar { grid-template-columns: 1fr; }
+      .filter-inner { flex-direction: column; align-items: flex-start; }
+      .page-hero-meta { gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ HEADER ══ -->
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+      <div class="header-top">
+        <div class="dateline" id="dateline"></div>
+        <a href="index.html" class="logo">The<em>Ledger</em></a>
+        <div class="header-cta">
+          <a href="#" class="btn-subscribe">Subscribe</a>
+        </div>
+      </div>
+      <nav class="main-nav">
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-list" id="nav-list">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="history.html" class="nav-link active">History</a></li>
+          <li><a href="#" class="nav-link">Politics</a></li>
+          <li><a href="#" class="nav-link">Strange Facts</a></li>
+          <li><a href="#" class="nav-link">Deep Dives</a></li>
+          <li><a href="#" class="nav-link">Archives</a></li>
+          <li><a href="#" class="nav-link">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ══ PAGE HERO ══ -->
+    <section class="page-hero">
+      <div class="page-hero-inner">
+        <div class="breadcrumb">
+          <a href="index.html">Home</a>
+          <span>/</span>
+          History
+        </div>
+        <h1>Through the <em>Ages</em></h1>
+        <p class="page-hero-desc">
+          Civilisations rose, empires collapsed, and ordinary people made extraordinary decisions. 
+          We dig into the events and forces that shaped every century — told with rigour and wonder.
+        </p>
+        <div class="page-hero-meta">
+          <div class="meta-stat">
+            <strong>142</strong>
+            <span>Articles</span>
+          </div>
+          <div class="meta-divider"></div>
+          <div class="meta-stat">
+            <strong>28</strong>
+            <span>Eras Covered</span>
+          </div>
+          <div class="meta-divider"></div>
+          <div class="meta-stat">
+            <strong>12</strong>
+            <span>Contributors</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ FILTER BAR ══ -->
+    <div class="filter-bar">
+      <div class="filter-inner">
+        <div class="filter-tags">
+          <span class="filter-label">Era:</span>
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="ancient">Ancient</button>
+          <button class="filter-btn" data-filter="medieval">Medieval</button>
+          <button class="filter-btn" data-filter="early-modern">Early Modern</button>
+          <button class="filter-btn" data-filter="modern">Modern</button>
+          <button class="filter-btn" data-filter="contemporary">Contemporary</button>
+        </div>
+        <select class="sort-select" id="sort-select">
+          <option value="latest">Latest First</option>
+          <option value="oldest">Oldest First</option>
+          <option value="popular">Most Read</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- ══ FEATURED POST ══ -->
+    <div class="featured-post">
+      <div class="featured-post-inner">
+        <div class="fp-image"></div>
+        <div class="fp-body">
+          <div class="fp-tag">Editor's Pick · Featured</div>
+          <h2>The Fall of <em>Constantinople</em> and the Birth of the Modern World</h2>
+          <p class="fp-excerpt">
+            On May 29, 1453, the walls of the greatest city in Christendom finally crumbled under 
+            Ottoman cannon fire. What followed wasn't just the end of an empire — it was the catalyst 
+            that sent scholars, sailors, and ideas cascading westward into the Renaissance.
+          </p>
+          <div class="fp-meta">
+            <span>By <strong>Dr. Helena Marsh</strong></span>
+            <span class="dot">·</span>
+            <span>Medieval Era</span>
+            <span class="dot">·</span>
+            <span>18 min read</span>
+          </div>
+          <a href="#" class="btn-read-fp">Read Full Article →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ POSTS GRID ══ -->
+    <div class="section-divider">
+      <div class="section-divider-inner">
+        <h2>All History Articles</h2>
+        <span class="article-count" id="article-count">Showing 9 of 142 articles</span>
+      </div>
+    </div>
+
+    <section class="posts-section">
+      <div class="posts-grid" id="posts-grid">
+
+        <article class="post-card" data-era="ancient">
+          <div class="post-img-wrap">
+            <div class="post-img" style="background-image:url('https://images.unsplash.com/photo-1608817576203-3c27ed168bd2?w=600&q=80')"></div>
+          </div>
+          <div class="post-body">
+            <div class="post-era">Ancient World · 753 BC–476 AD</div>
+            <h3 class="post-title">How Julius Caesar's Assassination Saved — and Doomed — the Republic</h3>
+            <p class="post-excerpt">The conspirators called themselves Liberatores. Within two years, they were all dead. The Republic they fought to preserve was already gone.</p>
+            <div class="post-footer">
+              <div class="post-author"><div class="author-dot"></div> Marcus Ferri</div>
+              <span class="post-read-time">8 min read</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="post-card" data-era="medieval">
+          <div class="post-img-wrap">
+            <div class="post-img" style="background-image:url('https://images.unsplash.com/photo-1555993539-1732b0258235?w=600&q=80')"></div>
+          </div>
+          <div class="post-body">
+            <div class="post-era">Medieval · 476–1453 AD</div>
+            <h3 class="post-title">The Black Death: How a Plague Reshaped European Society Forever</h3>
+            <p class="post-excerpt">One-third of Europe's population died within five years. The labour market, the Church, and the very concept of human dignity were never the same again.</p>
+            <div class="post-footer">
+              <div class="post-author"><div class="author-dot"></div> Petra Schwartz</div>
+              <span class="post-read-time">11 min read</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="post-card" data-era="early-modern">
+          <div class="post-img-wrap">
+            <div class="post-img" style="background-image:url('https://images.unsplash.com/photo-1575505586569-646b2ca898fc?w=600&q=80')"></div>
+          </div>
+          <div class="post-body">
+            <div class="post-era">Early Modern · 1453–1789</div>
+            <h3 class="post-title">Why the Printing Press Was the Internet of the 15th Century</h3>
+            <p class="post-excerpt">Gutenberg's invention didn't just spread books. It democratised knowledge, toppled the Church's information monopoly, and ignited the Reformation.</p>
+            <div class="post-footer">
+              <div class="post-author"><div class="author-dot"></div> Ingrid Lövgren</div>
+              <span class="post-read-time">7 min read</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="post-card" data-era="modern">
+          <div class="post-img-wrap">
+            <div class="post-img" style="background-image:url('https://images.unsplash.com/photo-1461360370896-922624d12aa1?w=600&q=80')"></div>
+          </div>
+          <div class="post-body">
+            <div class="post-era">Modern · 1789–1945</div>
+            <h3 class="post-title">The Night the Berlin Wall Fell — Hour by Hour</h3>
+            <p class="post-excerpt">A bureaucrat's mistake, a single press conference, and a crowd that simply refused to wait. How November 9, 1989 unfolded in real time.</p>
+            <div class="post-footer">
+              <div class="post-author"><div class="author-dot"></div> Petra Schwartz</div>
+              <span class="post-read-time">7 min read</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="post-card" data-era="ancient">
+          <div class="post-img-wrap">
+            <div class="post-img" style="background-image:url('https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?w=600&q=80')"></div>
+          </div>
+          <div class="post-body">
+            <div class="post-era">Ancient World · 753 BC–476 AD</div>
+            <h3 class="post-title">Ancient Libraries That Preserved Civilisation — and Were Lost to It</h3>
+            <p class="post-excerpt">The Library of Alexandria is the famous one. But across the ancient world, dozens of great collections burned, were looted, or simply vanished.</p>
+            <div class="post-footer">
+              <div class="post-author"><div class="author-dot"></div> Amara Okafor</div>
+              <span class="post-read-time">9 min read</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="post-card" data-era="contemporary">
+          <div class="post-img-wrap">
+            <div class="post-img" style="background-image:url('https://images.unsplash.com/photo-1521295121783-8a321d551ad2?w=600&q=80')"></div>
+          </div>
+          <div class="post-body">
+            <div class="post-era">Contemporary · 1945–Present</div>
+            <h3 class="post-title">The Cold War Proxy Battles You Were Never Taught in School</h3>
+            <p class="post-excerpt">From Angola to Guatemala to Indonesia, the superpower struggle played out through coups, insurgencies, and famine — largely hidden from Western headlines.</p>
+            <div class="post-footer">
+              <div class="post-author"><div class="author-dot"></div> James Rao</div>
+              <span class="post-read-time">13 min read</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="post-card" data-era="medieval">
+          <div class="post-img-wrap">
+            <div class="post-img" style="background-image:url('https://images.unsplash.com/photo-1560421683-6856ea585c78?w=600&q=80')"></div>
+          </div>
+          <div class="post-body">
+            <div class="post-era">Medieval · 476–1453 AD</div>
+            <h3 class="post-title">The Mongol Empire: Most Destructive Force in History — or Unlikely Globalists?</h3>
+            <p class="post-excerpt">Genghis Khan's armies killed tens of millions. They also created the largest free-trade zone in history and connected East to West for the first time.</p>
+            <div class="post-footer">
+              <div class="post-author"><div class="author-dot"></div> Liu Wei</div>
+              <span class="post-read-time">10 min read</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="post-card" data-era="early-modern">
+          <div class="post-img-wrap">
+            <div class="post-img" style="background-image:url('https://images.unsplash.com/photo-1548625149-fc4a29cf7092?w=600&q=80')"></div>
+          </div>
+          <div class="post-body">
+            <div class="post-era">Early Modern · 1453–1789</div>
+            <h3 class="post-title">The Women Who Ran the French Revolution — Before Being Erased From It</h3>
+            <p class="post-excerpt">Olympe de Gouges demanded rights. Théroigne de Méricourt marched on Versailles. Both paid the ultimate price when the men of liberty drew their lines.</p>
+            <div class="post-footer">
+              <div class="post-author"><div class="author-dot"></div> Claire Renaud</div>
+              <span class="post-read-time">12 min read</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="post-card" data-era="modern">
+          <div class="post-img-wrap">
+            <div class="post-img" style="background-image:url('https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=600&q=80')"></div>
+          </div>
+          <div class="post-body">
+            <div class="post-era">Modern · 1789–1945</div>
+            <h3 class="post-title">The Silk Road Was Never Just About Silk</h3>
+            <p class="post-excerpt">Silk was the currency. But along those ancient routes flowed plague, religion, paper, gunpowder, and the first stirrings of cultural globalisation.</p>
+            <div class="post-footer">
+              <div class="post-author"><div class="author-dot"></div> Reza Tehrani</div>
+              <span class="post-read-time">8 min read</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ══ TIMELINE STRIP ══ -->
+    <div class="timeline-strip">
+      <div class="timeline-inner">
+        <div class="timeline-header">
+          <h2>Moments That Changed Everything</h2>
+          <a href="#" class="timeline-see-all">Full Timeline →</a>
+        </div>
+        <div class="timeline-events">
+          <div class="timeline-event">
+            <div class="tl-dot"></div>
+            <div class="tl-year">776 BC</div>
+            <div class="tl-title">First Olympic Games, Ancient Greece</div>
+          </div>
+          <div class="timeline-event">
+            <div class="tl-dot"></div>
+            <div class="tl-year">1215 AD</div>
+            <div class="tl-title">Magna Carta signed, England</div>
+          </div>
+          <div class="timeline-event">
+            <div class="tl-dot"></div>
+            <div class="tl-year">1453 AD</div>
+            <div class="tl-title">Fall of Constantinople</div>
+          </div>
+          <div class="timeline-event">
+            <div class="tl-dot"></div>
+            <div class="tl-year">1789 AD</div>
+            <div class="tl-title">French Revolution begins</div>
+          </div>
+          <div class="timeline-event">
+            <div class="tl-dot"></div>
+            <div class="tl-year">1945 AD</div>
+            <div class="tl-title">End of World War II</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ WIDE POSTS + SIDEBAR ══ -->
+    <div class="content-with-sidebar">
+
+      <div>
+        <div class="section-divider" style="padding:0; margin: 3rem 0 2rem;">
+          <div class="section-divider-inner">
+            <h2>Long Reads</h2>
+          </div>
+        </div>
+
+        <div class="wide-posts-section" style="padding:0;">
+          <article class="wide-post">
+            <div class="wide-img-wrap">
+              <div class="wide-img" style="background-image:url('https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=600&q=80')"></div>
+            </div>
+            <div class="wide-body">
+              <div class="wide-post-era">Ancient World</div>
+              <h3 class="wide-post-title">The Persian Empire: How Cyrus the Great Built History's First Human Rights Charter</h3>
+              <p class="wide-post-excerpt">Centuries before the Enlightenment, a Persian king declared freedom of religion and the abolition of slavery. His clay cylinder is now at the United Nations.</p>
+              <div class="wide-post-meta">
+                <span>Dr. Farida Nouri</span><span class="dot">·</span><span>16 min read</span>
+              </div>
+            </div>
+          </article>
+          <article class="wide-post">
+            <div class="wide-img-wrap">
+              <div class="wide-img" style="background-image:url('https://images.unsplash.com/photo-1503066211773-d17a7e4e1b74?w=600&q=80')"></div>
+            </div>
+            <div class="wide-body">
+              <div class="wide-post-era">Modern Era</div>
+              <h3 class="wide-post-title">The Partition of India: 72 Hours That Tore a Subcontinent in Two</h3>
+              <p class="wide-post-excerpt">Cyril Radcliffe had five weeks to draw a border through centuries of intertwined communities. The lines he drew still bleed today.</p>
+              <div class="wide-post-meta">
+                <span>Priya Mehta</span><span class="dot">·</span><span>20 min read</span>
+              </div>
+            </div>
+          </article>
+          <article class="wide-post">
+            <div class="wide-img-wrap">
+              <div class="wide-img" style="background-image:url('https://images.unsplash.com/photo-1547584370-2cc98b8b8dc8?w=600&q=80')"></div>
+            </div>
+            <div class="wide-body">
+              <div class="wide-post-era">Contemporary</div>
+              <h3 class="wide-post-title">How the Marshall Plan Rebuilt Europe — and Why Nothing Like It Has Happened Since</h3>
+              <p class="wide-post-excerpt">Between 1948 and 1952, the United States spent the equivalent of $173 billion rebuilding its former enemies. The geopolitical logic was brutally simple.</p>
+              <div class="wide-post-meta">
+                <span>James Rao</span><span class="dot">·</span><span>14 min read</span>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="load-more-wrap">
+          <button class="btn-load" id="load-more-btn">Load More Articles</button>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+
+        <div class="sidebar-block">
+          <h3 class="sidebar-title">Browse by Era</h3>
+          <div class="sidebar-era-list">
+            <div class="era-item"><span>Prehistoric</span><span>8</span></div>
+            <div class="era-item"><span>Ancient World</span><span>31</span></div>
+            <div class="era-item"><span>Classical Antiquity</span><span>24</span></div>
+            <div class="era-item"><span>Medieval</span><span>29</span></div>
+            <div class="era-item"><span>Early Modern</span><span>22</span></div>
+            <div class="era-item"><span>Modern (1789–1945)</span><span>18</span></div>
+            <div class="era-item"><span>Contemporary</span><span>10</span></div>
+          </div>
+        </div>
+
+        <div class="sidebar-block">
+          <h3 class="sidebar-title">Popular Tags</h3>
+          <div class="sidebar-tags">
+            <span class="tag-pill">Empires</span>
+            <span class="tag-pill">War & Conflict</span>
+            <span class="tag-pill">Women in History</span>
+            <span class="tag-pill">Trade Routes</span>
+            <span class="tag-pill">Revolutions</span>
+            <span class="tag-pill">Science</span>
+            <span class="tag-pill">Religion</span>
+            <span class="tag-pill">Colonialism</span>
+            <span class="tag-pill">Archaeology</span>
+            <span class="tag-pill">Lost Civilisations</span>
+            <span class="tag-pill">Diplomacy</span>
+            <span class="tag-pill">Plague</span>
+          </div>
+        </div>
+
+        <div class="sidebar-block">
+          <h3 class="sidebar-title">Voices from History</h3>
+          <div class="sidebar-quotes">
+            <div class="sidebar-quote">
+              <p>"Well-behaved women seldom make history."</p>
+              <cite>— Laurel Thatcher Ulrich</cite>
+            </div>
+            <div class="sidebar-quote">
+              <p>"History is the version of past events that people have decided to agree upon."</p>
+              <cite>— Napoleon Bonaparte</cite>
+            </div>
+            <div class="sidebar-quote">
+              <p>"The most effective way to destroy people is to deny and obliterate their own understanding of their history."</p>
+              <cite>— George Orwell</cite>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+
+  </main>
+
+  <!-- ══ FOOTER ══ -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-logo">The<em>Ledger</em></div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="#">History</a>
+        <a href="#">Politics</a>
+        <a href="#">Strange Facts</a>
+        <a href="#">Deep Dives</a>
+        <a href="#">Archives</a>
+        <a href="#">About</a>
+        <a href="#">Privacy</a>
+      </div>
+      <p class="footer-copy">© 2026 The Ledger. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    /* ═══════════════════════════════
+       THE LEDGER — history.html JS
+       ═══════════════════════════════ */
+
+    /* Dateline */
+    (function () {
+      const el = document.getElementById('dateline');
+      if (!el) return;
+      const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      el.textContent = new Date().toLocaleDateString('en-US', opts).toUpperCase();
+    })();
+
+    /* Sticky header shadow */
+    window.addEventListener('scroll', () => {
+      document.getElementById('site-header').classList.toggle('scrolled', window.scrollY > 10);
+    }, { passive: true });
+
+    /* Mobile nav */
+    (function () {
+      const toggle = document.getElementById('nav-toggle');
+      const list   = document.getElementById('nav-list');
+      if (!toggle || !list) return;
+
+      toggle.addEventListener('click', () => {
+        const open = list.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', open);
+        const spans = toggle.querySelectorAll('span');
+        if (open) {
+          spans[0].style.transform = 'translateY(7px) rotate(45deg)';
+          spans[1].style.opacity   = '0';
+          spans[2].style.transform = 'translateY(-7px) rotate(-45deg)';
+        } else {
+          spans.forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
+        }
+      });
+    })();
+
+    /* Era filter */
+    (function () {
+      const btns  = document.querySelectorAll('.filter-btn');
+      const cards = document.querySelectorAll('.post-card');
+      const count = document.getElementById('article-count');
+
+      btns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          btns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const filter = btn.dataset.filter;
+          let visible = 0;
+
+          cards.forEach(card => {
+            const show = filter === 'all' || card.dataset.era === filter;
+            card.style.display = show ? 'flex' : 'none';
+            if (show) visible++;
+          });
+
+          if (count) count.textContent = `Showing ${visible} of 142 articles`;
+        });
+      });
+    })();
+
+    /* Load More (simulated) */
+    (function () {
+      const btn = document.getElementById('load-more-btn');
+      if (!btn) return;
+
+      let loaded = 9;
+
+      btn.addEventListener('click', () => {
+        btn.textContent = 'Loading…';
+        btn.disabled = true;
+
+        setTimeout(() => {
+          loaded += 6;
+          const count = document.getElementById('article-count');
+          if (count) count.textContent = `Showing ${loaded} of 142 articles`;
+          btn.textContent = loaded >= 142 ? 'All articles loaded' : 'Load More Articles';
+          btn.disabled = loaded >= 142;
+        }, 900);
+      });
+    })();
+  </script>
+
+</body>
+</html>
